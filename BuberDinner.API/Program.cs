@@ -1,7 +1,9 @@
 //using BuberDinner.API.Filters;
 //using BuberDinner.API.Middleware;
+using BuberDinner.API.Errors;
 using BuberDinner.Application;
 using BuberDinner.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,14 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddSingleton<ProblemDetailsFactory,BuberDinnerProblemDetailsFactory>();
 
 var app = builder.Build();
 
 //app.UseMiddleware<ErrorHandlingMiddleware>();
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+app.UseExceptionHandler("/error");
 
 app.UseHttpsRedirection();
 
