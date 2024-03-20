@@ -1,3 +1,4 @@
+//using BuberDinner.API.Middleware;
 using BuberDinner.Application;
 using BuberDinner.Infrastructure;
 
@@ -9,7 +10,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
+//app.UseMiddleware<ErrorHandlingMiddleware>();
 //{
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
