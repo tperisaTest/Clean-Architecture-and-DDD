@@ -11,12 +11,12 @@ namespace BuberDinner.API.Controllers
         public IActionResult Error()
         {
             var exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
-            var (statusCode, message) = exception switch
-            {
-                IServiceException serviceException => ((int)serviceException.StatusCode, serviceException.ErrorMessage),
-                _ => (StatusCodes.Status500InternalServerError, "An unexpected error has occured")
-            };
-            return Problem(statusCode: statusCode, detail: message);
+            //var (statusCode, message) = exception switch
+            //{
+            //    DuplicateEmailError => ((int)serviceException.StatusCode, serviceException.ErrorMessage),
+            //    _ => (StatusCodes.Status500InternalServerError, "An unexpected error has occured")
+            //};
+            return Problem(/*statusCode: statusCode, detail: message*/);
         }
     }
 }
