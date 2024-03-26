@@ -1,11 +1,13 @@
-﻿using System.Net;
+﻿using FluentResults;
 
 namespace BuberDinner.Application.Common.Errors
 {
     public class DuplicateEmailError : IError
     {
-        public HttpStatusCode StatusCode => HttpStatusCode.Conflict;
+        public List<IError> Reasons => throw new NotImplementedException();
 
-        public string ErrorMessage => "Email is already registered.";
+        public string Message => throw new NotImplementedException();
+
+        public Dictionary<string, object> Metadata => throw new NotImplementedException();
     }
 }

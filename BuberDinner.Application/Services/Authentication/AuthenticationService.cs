@@ -2,7 +2,7 @@
 using BuberDinner.Application.Common.Interfaces.Authentication;
 using BuberDinner.Application.Common.Interfaces.Persistence;
 using BuberDinner.Domain.Entities;
-using OneOf;
+using FluentResults;
 
 namespace BuberDinner.Application.Services.Authentication
 {
@@ -27,11 +27,11 @@ namespace BuberDinner.Application.Services.Authentication
             return new AuthenticationResult(user, token);
         }
 
-        public OneOf<AuthenticationResult, IError> Register(string firstName, string lastName, string email, string password)
+        public Result<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
         {
             if (_userRepository.GetByEmail(email) != null)
             {
-                return new DuplicateEmailError();
+                return Result.Fail<AuthenticationResult>(new[] { new DuplicateEmailError() });
             }
             var user = new User
             {
