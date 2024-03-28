@@ -1,4 +1,6 @@
 ﻿using BuberDinner.Application.Services.Authentication;
+using BuberDinner.Application.Services.Authentication.Commands;
+using BuberDinner.Application.Services.Authentication.Common;
 using BuberDinner.Contracts.Authentication;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
@@ -8,15 +10,17 @@ namespace BuberDinner.API.Controllers
     [Route("auth")]
     public class AuthenticationController : ApiController
     {
-        private readonly IAuthenticationService _authenticationService;
-        public AuthenticationController(IAuthenticationService authenticationService)
+        private readonly IAuthenticationQueryService _authenticationQueryService;
+        private readonly IAuthenticationCommandService _authenticationCommandService;
+        public AuthenticationController(IAuthenticationQueryService authenticationQueryService, IAuthenticationCommandService authenticationCommandService)
         {
-            _authenticationService = authenticationService;
+            _authenticationQueryService = authenticationQueryService;
+            _authenticationCommandService = authenticationCommandService;
         }
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            ErrorOr<AuthenticationResult> result = _authenticationService.Login(request.Email, request.Password);
+            ErrorOr<AuthenticationResult> result = _authenticationQueryService.Login(request.Email, request.Password);
             return result.Match(
                 value => Ok(MapAuthResult(value)),
                 errors => Problem(errors)
@@ -26,7 +30,7 @@ namespace BuberDinner.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            ErrorOr<AuthenticationResult> result = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+            ErrorOr<AuthenticationResult> result = _authenticationCommandService.Register(request.FirstName, request.LastName, request.Email, request.Password);
             return result.Match(
                 value => Ok(MapAuthResult(value)),
                 errors => Problem(errors)
