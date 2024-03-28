@@ -1,5 +1,4 @@
-﻿using BuberDinner.Application.Common.Errors;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuberDinner.API.Controllers

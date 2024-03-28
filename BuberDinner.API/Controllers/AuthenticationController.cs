@@ -1,15 +1,12 @@
-﻿using BuberDinner.Application.Common.Errors;
-using BuberDinner.Application.Services.Authentication;
+﻿using BuberDinner.Application.Services.Authentication;
 using BuberDinner.Contracts.Authentication;
-using FluentResults;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuberDinner.API.Controllers
 {
     [Route("auth")]
-    [ApiController]
-    //[ErrorHandlingFilter]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService _authenticationService;
         public AuthenticationController(IAuthenticationService authenticationService)
@@ -19,25 +16,21 @@ namespace BuberDinner.API.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var result = _authenticationService.Login(request.Email, request.Password);
-            var response = new AuthenticationResponse(result.User.Id, result.User.FirstName, result.User.LastName, result.User.Email, result.Token);
-            return Ok(response);
+            ErrorOr<AuthenticationResult> result = _authenticationService.Login(request.Email, request.Password);
+            return result.Match(
+                value => Ok(MapAuthResult(value)),
+                errors => Problem(errors)
+                );
         }
 
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            Result<AuthenticationResult> result = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
-            if (result.IsSuccess)
-            {
-                return Ok(MapAuthResult(result.Value));
-            }
-            var firstError = result.Errors[0];
-            if (firstError is DuplicateEmailError)
-            {
-                return Problem(statusCode: StatusCodes.Status409Conflict, detail: "Email already exists.");
-            }
-            return Problem(statusCode: StatusCodes.Status500InternalServerError, detail: "Something went wrong.");
+            ErrorOr<AuthenticationResult> result = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+            return result.Match(
+                value => Ok(MapAuthResult(value)),
+                errors => Problem(errors)
+                );
         }
 
         private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
