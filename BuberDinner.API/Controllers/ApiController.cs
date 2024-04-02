@@ -1,10 +1,12 @@
 ﻿using BuberDinner.API.Common.Http;
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BuberDinner.API.Controllers
 {
+    [Authorize]
     [ApiController]
     public abstract class ApiController : ControllerBase
     {
