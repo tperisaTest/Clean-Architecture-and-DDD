@@ -4,7 +4,7 @@ using BuberDinner.Application.Common.Interfaces.Persistence;
 using BuberDinner.Domain.Common.Errors;
 using ErrorOr;
 using MediatR;
-using User = BuberDinner.Domain.Entities.User;
+using User = BuberDinner.Domain.User.User;
 
 namespace BuberDinner.Application.Authentication.Commands.Register
 {
