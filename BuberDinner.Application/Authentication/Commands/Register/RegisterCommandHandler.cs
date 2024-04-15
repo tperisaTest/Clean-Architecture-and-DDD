@@ -19,17 +19,11 @@ namespace BuberDinner.Application.Authentication.Commands.Register
         }
         public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            if (_userRepository.GetByEmail(request.Email) != null)
+            if (_userRepository.GetByEmail(request.Email) is not null)
             {
                 return Errors.User.DuplicateEmail;
             }
-            var user = new User
-            {
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Password = request.Password
-            };
+            var user = User.Create(request.FirstName,request.LastName,request.Email,request.Password);
             _userRepository.Add(user);
             var token = _tokenGenerator.GenerateToken(user);
             return new AuthenticationResult(user, token);
