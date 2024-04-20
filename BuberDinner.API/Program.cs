@@ -11,6 +11,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSingleton<ProblemDetailsFactory, BuberDinnerProblemDetailsFactory>();
 builder.Services.AddSingleton<AuthenticationMapper>();
+builder.Services.AddSingleton<MenuMapper>();
 
 var app = builder.Build();
 
